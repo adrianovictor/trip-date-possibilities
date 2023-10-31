@@ -13,6 +13,9 @@ export class AppController {
   })
   @Get()
   getHello(): any[] {
+    /**
+     * Aqui estamos chamando a funções com valores fixos para a realização da validação
+     */
     return this.appService.getHello(
       Vocation.Create('2024-06-01', '2024-06-30'),
       DesiredTripDuration.Create(5, 10),
