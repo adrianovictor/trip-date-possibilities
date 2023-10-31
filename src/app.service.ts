@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { utc } from 'moment';
+import { DesiredTripDuration, Vocation } from './app.model';
 
 type TripDates = {
   tripStartDate: string; // YYYY-MM-DD
@@ -7,40 +8,50 @@ type TripDates = {
   duration: number; // In days
 };
 
-type GetTripDatesPossibilities = {
-  vacation: Vacation;
-  desiredTripDuration: DesiredTripDuration;
-};
+// type GetTripDatesPossibilities = {
+//   vacation: Vacation;
+//   desiredTripDuration: DesiredTripDuration;
+// };
 
-type Vacation = {
-  vacationStartDate: string; // YYYY-MM-DD
-  vacationEndDate: string; // YYYY-MM-DD
-};
+// type Vacation = {
+//   vacationStartDate: string; // YYYY-MM-DD
+//   vacationEndDate: string; // YYYY-MM-DD
+// };
 
-type DesiredTripDuration = {
-  minDays: number;
-  maxDays: number;
-};
+// type DesiredTripDuration = {
+//   minDays: number;
+//   maxDays: number;
+// };
 
 @Injectable()
 export class AppService {
-  private testInput: GetTripDatesPossibilities = {
-    vacation: {
-      vacationStartDate: '2024-06-01',
-      vacationEndDate: '2024-06-30',
-    },
-    desiredTripDuration: {
-      minDays: 5,
-      maxDays: 10,
-    },
-  };
+  // private testInput: GetTripDatesPossibilities = {
+  //   vacation: {
+  //     vacationStartDate: '2024-06-01',
+  //     vacationEndDate: '2024-06-30',
+  //   },
+  //   desiredTripDuration: {
+  //     minDays: 5,
+  //     maxDays: 10,
+  //   },
+  // };
 
-  getHello(): TripDates[] {
+  getHello(
+    vocation: Vocation,
+    desiredTripDuration: DesiredTripDuration,
+  ): TripDates[] {
+    return this.getTripDatesPossibilities(vocation, desiredTripDuration);
+  }
+
+  private getTripDatesPossibilities(
+    vacation: Vocation,
+    desiredTripDuration: DesiredTripDuration,
+  ): TripDates[] {
     const possibleTripDates: TripDates[] = [];
-    const minDays = this.testInput.desiredTripDuration.minDays;
-    const maxDays = this.testInput.desiredTripDuration.maxDays;
-    const startTripDate = this.testInput.vacation.vacationStartDate;
-    const endTripDate = this.testInput.vacation.vacationEndDate;
+    const minDays = desiredTripDuration.MinDays;
+    const maxDays = desiredTripDuration.MaxDays;
+    const startTripDate = vacation.StartDate;
+    const endTripDate = vacation.EndDate;
 
     for (let day: number = minDays; day <= maxDays; day++) {
       let hasEnded = false;
@@ -66,14 +77,6 @@ export class AppService {
     }
 
     return possibleTripDates;
-  }
-
-  private getTripDatesPossibilities({
-    vacation,
-    desiredTripDuration,
-  }: GetTripDatesPossibilities): TripDates[] {
-    const tripDates: TripDates[] = [];
-    return tripDates;
   }
 
   private diffDays(departureDate: string, returnDate: string): number {
